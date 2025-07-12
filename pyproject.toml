@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image_evaluators"
+version = "0.0.1"
+authors = [
+  { name="xyfJASON", email="xyfjason@gmail.com" },
+]
+description = "Build image evaluators based on torch and torchvision"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.4.1",
+    "torchvision>=0.19.1",
+    "numpy",
+    "Pillow",
+    "scikit-learn==1.6.1",
+    "scikit-image==0.24.0",
+    "lpips==0.1.4",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/xyfJASON/image-evaluators"
+"Bug Tracker" = "https://github.com/xyfJASON/image-evaluators/issues"
