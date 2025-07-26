@@ -2,7 +2,7 @@ import torch
 from torch import Tensor
 from skimage.metrics import structural_similarity as ssim_skimage
 
-from image_evaluators.utils import check_tensor
+from ...utils import check_tensor
 
 
 def ssim_fn(images1: Tensor, images2: Tensor) -> Tensor:

@@ -2,7 +2,7 @@ import torch
 from torch import Tensor
 from lpips import LPIPS
 
-from image_evaluators.utils import check_tensor
+from ...utils import check_tensor
 
 
 lpips_module = LPIPS()

@@ -2,7 +2,7 @@ import torch
 from torch import Tensor
 from skimage.metrics import peak_signal_noise_ratio as psnr_skimage
 
-from image_evaluators.utils import check_tensor
+from ...utils import check_tensor
 
 
 def psnr_fn(images1: Tensor, images2: Tensor) -> Tensor:

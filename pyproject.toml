@@ -3,18 +3,21 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "image_evaluators"
+name = "evaluatorx"
 version = "0.0.1"
+description = "Implements evaluators based on torch and torchvision"
 authors = [
   { name="xyfJASON", email="xyfjason@gmail.com" },
 ]
-description = "Build image evaluators based on torch and torchvision"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
+
 dependencies = [
     "torch>=2.4.1",
     "torchvision>=0.19.1",
+    "torchaudio>=2.4.1",
     "numpy",
+    "pandas",
     "Pillow",
     "scikit-learn==1.6.1",
     "scikit-image==0.24.0",
@@ -22,10 +25,10 @@ dependencies = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/xyfJASON/image-evaluators"
-"Bug Tracker" = "https://github.com/xyfJASON/image-evaluators/issues"
+Homepage = "https://github.com/xyfJASON/evaluatorx"
+Issues = "https://github.com/xyfJASON/evaluatorx/issues"
