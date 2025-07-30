@@ -1,8 +1,8 @@
 import torch
 from torch import Tensor
 
-from .metrics.normal import angular_error_fn
-from .utils import check_tensor
+from ..metrics.normal import angular_error_fn
+from ..utils import check_tensor
 
 
 class NormalEvaluator:

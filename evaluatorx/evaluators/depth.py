@@ -3,9 +3,9 @@ import numpy as np
 import torch
 from torch import Tensor
 
-from .meters import AverageMeter
-from .metrics.depth import absrel_fn, rmse_fn, threshold_percentage_fn
-from .utils import check_tensor
+from ..meters import AverageMeter
+from ..metrics.depth import absrel_fn, rmse_fn, threshold_percentage_fn
+from ..utils import check_tensor
 
 
 class DepthEvaluator:

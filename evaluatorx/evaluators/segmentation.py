@@ -1,7 +1,7 @@
 import torch
 from torch import Tensor
 
-from .utils import check_tensor
+from ..utils import check_tensor
 
 
 class SegmentationEvaluator:
