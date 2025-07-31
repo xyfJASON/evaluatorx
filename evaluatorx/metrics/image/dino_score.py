@@ -9,14 +9,18 @@ from ...utils import check_tensor
 
 
 class DINOScore(nn.Module):
+    """Computes the DINO score between two batches of images.
+
+    Reference:
+      - https://github.com/google/dreambooth/issues/3#issuecomment-1804546726
+      - https://github.com/OSU-NLP-Group/MagicBrush/blob/main/evaluation/image_eval.py
+    """
     def __init__(self):
         super().__init__()
 
         # load DINO ViT-S/16
-        self.model = ViTModel.from_pretrained(
-            "facebook/dino-vits16",
-            add_pooling_layer=False,
-        )
+        self.model = ViTModel.from_pretrained("facebook/dino-vits16", add_pooling_layer=False)
+        self.model.eval()
 
         # DINO transforms
         self.transform = T.Compose([
@@ -28,17 +32,13 @@ class DINOScore(nn.Module):
         ])
 
     def forward(self, images1: Tensor, images2: Tensor) -> Tensor:
-        """Computes the DINO score between two batches of images.
-
+        """
         Args:
             images1: Tensor of shape (B, C, H, W) and range [0, 1].
             images2: Tensor of shape (B, C, H, W) and range [0, 1].
 
         Returns:
             score: Tensor of shape (B, ).
-
-        Reference:
-          - https://github.com/google/dreambooth/issues/3#issuecomment-1804546726
         """
         # check image tensors
         check_tensor(images1, ndim=4, dtype=torch.float32, min_value=0., max_value=1.)
@@ -54,6 +54,3 @@ class DINOScore(nn.Module):
         # compute cosine similarity
         score = F.cosine_similarity(features1, features2, dim=1)
         return score
-
-
-dino_score_fn = DINOScore()

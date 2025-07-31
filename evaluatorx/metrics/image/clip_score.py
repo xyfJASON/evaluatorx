@@ -8,24 +8,26 @@ from ...utils import check_tensor
 
 
 class CLIPIScore(nn.Module):
-    def __init__(self):
+    """Computes the CLIP score between two batches of images.
+
+    Reference:
+      - https://github.com/Lightning-AI/torchmetrics/blob/master/src/torchmetrics/functional/multimodal/clip_score.py
+      - https://github.com/OSU-NLP-Group/MagicBrush/blob/main/evaluation/image_eval.py
+    """
+    def __init__(self, pretrained_model_name_or_path: str = "openai/clip-vit-large-patch14"):
         super().__init__()
-        self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
-        self.model = CLIPModel.from_pretrained("openai/clip-vit-large-patch14")
+        self.processor = CLIPProcessor.from_pretrained(pretrained_model_name_or_path)
+        self.model = CLIPModel.from_pretrained(pretrained_model_name_or_path)
+        self.model.eval()
 
     def forward(self, images1: Tensor, images2: Tensor) -> Tensor:
-        """Computes the CLIP score between two batches of images.
-
+        """
         Args:
             images1: Tensor of shape (B, C, H, W) and range [0, 1].
             images2: Tensor of shape (B, C, H, W) and range [0, 1].
 
         Returns:
             score: Tensor of shape (B, ).
-
-        Reference:
-          - https://github.com/Lightning-AI/torchmetrics/blob/master/src/torchmetrics/functional/multimodal/clip_score.py
-          - https://github.com/xichenpan/Kosmos-G/blob/main/eval/clip_score.py
         """
         # check image tensors
         check_tensor(images1, ndim=4, dtype=torch.float32, min_value=0., max_value=1.)
@@ -45,24 +47,26 @@ class CLIPIScore(nn.Module):
 
 
 class CLIPTScore(nn.Module):
-    def __init__(self):
+    """Computes the CLIP score between a batch of images and a batch of texts.
+
+    Reference:
+      - https://github.com/Lightning-AI/torchmetrics/blob/master/src/torchmetrics/functional/multimodal/clip_score.py
+      - https://github.com/OSU-NLP-Group/MagicBrush/blob/main/evaluation/image_eval.py
+    """
+    def __init__(self, pretrained_model_name_or_path: str = "openai/clip-vit-large-patch14"):
         super().__init__()
-        self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
-        self.model = CLIPModel.from_pretrained("openai/clip-vit-large-patch14")
+        self.processor = CLIPProcessor.from_pretrained(pretrained_model_name_or_path)
+        self.model = CLIPModel.from_pretrained(pretrained_model_name_or_path)
+        self.model.eval()
 
     def forward(self, images: Tensor, texts: list[str]) -> Tensor:
-        """Computes the CLIP score between a batch of images and a batch of texts.
-
+        """
         Args:
             images: Tensor of shape (B, C, H, W) and range [0, 1].
             texts: List of strings.
 
         Returns:
             score: Tensor of shape (B, ).
-
-        Reference:
-          - https://github.com/Lightning-AI/torchmetrics/blob/master/src/torchmetrics/functional/multimodal/clip_score.py
-          - https://github.com/xichenpan/Kosmos-G/blob/main/eval/clip_score.py
         """
         # check inputs
         check_tensor(images, ndim=4, dtype=torch.float32, min_value=0., max_value=1.)
@@ -79,8 +83,3 @@ class CLIPTScore(nn.Module):
         # compute cosine similarity
         score = F.cosine_similarity(image_features, text_features, dim=1)
         return score
-
-
-clip_i_score_fn = CLIPIScore()
-clip_t_score_fn = CLIPTScore()
-clip_score_fn = CLIPTScore()

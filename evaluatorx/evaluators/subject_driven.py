@@ -2,8 +2,8 @@ import torch
 from torch import Tensor
 
 from ..meters import AverageMeter
-from ..metrics.image.clip_score import clip_i_score_fn, clip_t_score_fn
-from ..metrics.image.dino_score import dino_score_fn
+from ..metrics.image.clip_score import CLIPIScore, CLIPTScore
+from ..metrics.image.dino_score import DINOScore
 from ..utils import check_tensor
 
 
@@ -12,11 +12,15 @@ class SubjectDrivenEvaluator:
 
     Reference:
       - https://github.com/google/dreambooth/issues/3#issuecomment-1804546726
+      - https://github.com/OSU-NLP-Group/MagicBrush/blob/main/evaluation/image_eval.py
     """
 
     METRICS = ["dino", "clip-i", "clip-t"]
 
     def __init__(self):
+        self.dino_score_fn = DINOScore()
+        self.clip_i_score_fn = CLIPIScore("openai/clip-vit-base-patch32")
+        self.clip_t_score_fn = CLIPTScore("openai/clip-vit-base-patch32")
         self.average_meters = {metric: AverageMeter() for metric in self.METRICS}
 
     def update(self, gens: Tensor, refs: Tensor, prompts: list[str]):
@@ -33,11 +37,11 @@ class SubjectDrivenEvaluator:
         # compute metrics
         for metric in self.METRICS:
             if metric == "dino":
-                score = dino_score_fn(gens, refs)  # (B, )
+                score = self.dino_score_fn(gens, refs)  # (B, )
             elif metric == "clip-i":
-                score = clip_i_score_fn(gens, refs)  # (B, )
+                score = self.clip_i_score_fn(gens, refs)  # (B, )
             elif metric == "clip-t":
-                score = clip_t_score_fn(gens, prompts)  # (B, )
+                score = self.clip_t_score_fn(gens, prompts)  # (B, )
             else:
                 raise ValueError(f"Unknown metric: {metric}")
             self.average_meters[metric].update(score)
